@@ -1,11 +1,12 @@
 import aiohttp
+from aiodataloader import DataLoader
 from aiohttp.client_exceptions import ClientResponseError
 import asyncio
 
 # Data loading using the aiohttp and asyncio libraries
 #   inspired by hrbolek/uoishelepres
 
-class CouchDBDataLoader:
+class CouchDBDataLoader(DataLoader):
     def __init__(self, db_url, db_name):
         """
         The function initializes a class instance with a database URL, database name, batch size, and a
@@ -17,6 +18,7 @@ class CouchDBDataLoader:
         is used to specify which database you want to interact with when making database queries or
         operations
         """
+        super().__init__()
         self.db_url = db_url
         self.db_name = db_name
         self.batch_size = 10  # Set your desired batch size here
@@ -57,6 +59,7 @@ class CouchDBDataLoader:
         :return: a list of documents corresponding to the input keys. If a document is not found for a
         particular key, None is returned in its place.
         """
+        print("loading keys", keys)
         datamap = {}
         not_found_keys = set(keys)
         while not_found_keys:
@@ -68,6 +71,7 @@ class CouchDBDataLoader:
                 datamap[doc["_id"]] = doc
 
         result = [datamap.get(id, None) for id in keys]
+        print(result)
         return result
 
     async def close(self):
@@ -87,7 +91,13 @@ async def main():
     loader = CouchDBDataLoader(db_url, db_name)
     keys = ["class_id_2", "teacher_id_1", "student_id_3"]
     result = await loader.batch_load_fn(keys)
+
+    results = [loader.load(key) for key in keys] # load se může v různých častech volat v jednotlivých dotazích
+    # simulace různých požadavků
+    results = await asyncio.gather(*results)
+    # všechny awaitables se načtou což vede k jednomu dotazu
     print(result)
+    print(results)
 
     await loader.close()
 

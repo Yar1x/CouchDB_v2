@@ -164,9 +164,6 @@ class_documents = [
     }
 ]
 
-
-
-
 all_documents = student_documents + teacher_documents + class_documents
 
 
@@ -175,19 +172,19 @@ all_documents = student_documents + teacher_documents + class_documents
 #     db.save(docs)
 
 # Test if documents were inserted
-print("Inserted documents:")
-for doc_id in db:
-    doc = db[doc_id]
-    print(f"''Doc id: {doc['_id']} ; Name: {doc['name']}")
+# print("Inserted documents:")
+# for doc_id in db:
+#     doc = db[doc_id]
+#     print(f"''Doc id: {doc['_id']} ; Name: {doc['name']}")
 
 db_url = "http://admin:password@localhost:5984/students"
+
+# Structure for finding documents by ID
 document_ids = {
     "docs": [
 
     
-    {
-       "id": "student_id_1"
-    },
+    {"id": "student_id_1"},
     {"id": "student_id_5"},
     {"id": "teacher_id_3"},
     {"id":"class_id_2"}
@@ -201,4 +198,5 @@ if result:
 else:
     print("Failed to fetch data.")
 
+# HTTP Request using CURL
 #curl -X POST http://admin:password@localhost:5984/students/_bulk_get -H "Accept: application/json" -H "Content-Type: application/json" -d "{\"docs\": [{\"id\": \"student_id_1\"}, {\"id\":\"student_id_5\"},{\"id\": \"teacher_id_3\"},{\"id\":\"class_id_2\"}]}"
