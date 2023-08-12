@@ -7,3 +7,16 @@ services:
       - COUCHDB_PASSWORD=password
     ports:
       - 5984:5984
+
+
+  jupyter:
+    image: jupyter/tensorflow-notebook
+    restart: always
+    ports:
+      - 31002:8888
+      - 31100:9990
+      - 31101:9991
+      - 31102:9992
+      - 31103:9993
+    volumes:
+      - ./notebooks:/home/jovyan/work
